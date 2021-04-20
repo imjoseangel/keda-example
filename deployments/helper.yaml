@@ -1,0 +1,35 @@
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: helper
+  labels:
+    app: helper
+spec:
+  selector:
+    matchLabels:
+      app: helper
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: helper
+    spec:
+      containers:
+        - name: master
+          image: imjoseangel/helper
+          imagePullPolicy: IfNotPresent
+          command: ["sleep", "10000"]
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - pkill -f "sleep"
+          env:
+            - name: REDIS_ADDRESS
+              value: "redis:6379"
+          resources:
+            limits:
+              cpu: "0.1"
+              memory: "128Mi"

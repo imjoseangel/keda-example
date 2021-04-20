@@ -9,8 +9,8 @@ import (
 )
 
 func main() {
-	app := &cli.App{
-		Name:  "app",
+	helper := &cli.App{
+		Name:  "helper",
 		Usage: "Simple app for a keda related talk",
 		Commands: []cli.Command{
 			{
@@ -45,12 +45,26 @@ func main() {
 							return nil
 						},
 					},
+					{
+						Name:  "list",
+						Usage: "Prints the Redis list",
+						Action: func(c *cli.Context) error {
+							_, err := GetListLength()
+							if err != nil {
+								fmt.Println("Failed to print Redis list")
+								log.Fatal(err)
+							} else {
+								fmt.Println("Queue printed.")
+							}
+							return nil
+						},
+					},
 				},
 			},
 		},
 	}
 
-	err := app.Run(os.Args)
+	err := helper.Run(os.Args)
 	if err != nil {
 		log.Fatal(err)
 	}

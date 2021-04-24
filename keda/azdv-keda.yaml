@@ -1,0 +1,20 @@
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: http-scaledobject
+  namespace: default
+  labels:
+    deploymentName: dummy
+spec:
+  maxReplicaCount: 10
+  pollingInterval: 3
+  cooldownPeriod:  5
+  scaleTargetRef:
+    name: dummy
+  triggers:
+    - type: metrics-api
+      metadata:
+        targetValue: "1"
+        url: "http://azuredevops.default.svc.cluster.local:8080"
+        valueLocation: "runningjobs"

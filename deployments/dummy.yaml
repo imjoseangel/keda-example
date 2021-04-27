@@ -22,11 +22,6 @@ spec:
         - name: dummy
           image: imjoseangel/dummy
           imagePullPolicy: IfNotPresent
-          lifecycle:
-            preStop:
-              exec:
-                command:
-                  - pkill -f "sleep"
           env:
             - name: REDIS_ADDRESS
               value: "redis.default:6379"

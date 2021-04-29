@@ -22,9 +22,6 @@ spec:
         - name: dummy
           image: imjoseangel/dummy
           imagePullPolicy: IfNotPresent
-          env:
-            - name: REDIS_ADDRESS
-              value: "redis.default:6379"
           resources:
             requests:
               memory: "64Mi"

@@ -49,7 +49,7 @@ spec:
       containers:
       - name: azuredevops
         image: imjoseangel/azdvpool
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         env:
           - name: ADV_TOKEN
             valueFrom:

@@ -2,17 +2,45 @@
 apiVersion: keda.sh/v1alpha1
 kind: ScaledJob
 metadata:
-  name: dummy
+  name: scaleset
   namespace: default
 spec:
   jobTargetRef:
     template:
       spec:
         containers:
-        - name: dummy
-          image: imjoseangel/dummy
-          imagePullPolicy: Always
-          command: ["echo",  "dummy"]
+        - name: scaleset
+          image: imjoseangel/scaleset
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+          - name: config-volume
+            mountPath: /usr/local/sbin/config.ini
+            subPath: config.ini
+          env:
+            - name: ARM_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: azscalesetsp
+                  key: ARM_CLIENT_ID
+            - name: ARM_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: azscalesetsp
+                  key: ARM_CLIENT_SECRET
+            - name: ARM_SUBSCRIPTION_ID
+              valueFrom:
+                secretKeyRef:
+                  name: azscalesetsp
+                  key: ARM_SUBSCRIPTION_ID
+            - name: ARM_TENANT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: azscalesetsp
+                  key: ARM_TENANT_ID
+        volumes:
+          - name: config-volume
+            configMap:
+              name: scaleset-ini-config
         restartPolicy: Never
     parallelism: 1
     completions: 1
